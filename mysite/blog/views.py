@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from .models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
-from .forms import EmailPostForm
+from .forms import EmailPostForm, LoginForm
 # Create your views here.
 from django.core.mail import send_mail
+from django.contrib.auth import authenticate, login
 
 
 class PostListView(ListView):
@@ -59,3 +60,30 @@ def post_share(request, post_id):
     return render(request, 'blog/post/share.html', {'post': post,
                                                     'form': form,
                                                     'sent': sent})
+
+
+# def user_login(request):
+#     print('test')
+#     if request.method == 'POST':
+#         form = LoginForm(request.POST)
+#         print('0')
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             user = authenticate(request,
+#                                 username=cd['username'],
+#                                 password=cd['password'])
+#             print('1')
+#             if user is not None:
+#                 if user.is_active:
+#                     login(request, user)
+#                     print('2')
+#                     return HttpResponse('Authenticated successfully')
+#                 else:
+#                     print('3')
+#                     return HttpResponse('Disabled account')
+#             else:
+#                 return HttpResponse('Invalid login')
+#     else:
+#         form = LoginForm()
+#         print('5')
+#     return render(request, 'blog/account/login.html', {'form': form})

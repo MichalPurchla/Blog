@@ -128,3 +128,6 @@ EMAIL_HOST_USER = 'django.email.post.recomendation@gmail.com'
 EMAIL_HOST_PASSWORD = 'hlvtfvdvlrpvyxlq'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+#
+# LOGIN_REDIRECT_URL = '/blog'
+# LOGIN_URL = '/blog'
