@@ -3,7 +3,7 @@ from django.http import Http404, HttpResponse
 from .models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
-from .forms import EmailPostForm, LoginForm
+from .forms import EmailPostForm, LoginForm, UserRegistration
 # Create your views here.
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
@@ -61,6 +61,25 @@ def post_share(request, post_id):
                                                     'form': form,
                                                     'sent': sent})
 
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistration(request.POST)
+        if form.is_valid():
+            new_user = form.save(commit=False)
+            new_user.set_password(form.cleaned_data['password'])
+            new_user.save()
+            cd = form.cleaned_data
+            subject = f"Welcome {cd['first_name']} to MyBlog!"
+            message = f"Thank you {cd['first_name']} for joining MyBlog.\n" \
+                      f" Your account {cd['username']} has been successfully created!" \
+                      f"Best wishes\n" \
+                      f"M.P."
+            send_mail(subject, message, 'django.email.post.recomendation@gmail.com', [cd['email']])
+            return render(request, 'registration/register_done.html', {'new_user': new_user})
+    else:
+        form = UserRegistration()
+    return render(request, 'registration/register.html', {'form': form})
 
 # def user_login(request):
 #     print('test')
