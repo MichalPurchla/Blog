@@ -1,15 +1,55 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404, HttpResponse
+from django.urls import reverse_lazy, reverse
+from django.utils.text import slugify
 from django.views.decorators.http import require_POST
-
 from .models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView, UpdateView
 from .forms import EmailPostForm, LoginForm, UserRegistration, CommentForm
-# Create your views here.
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
+from .forms import PostForm
+
+
+class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView, ):
+    model = Post
+    form_class = PostForm
+    login_url = 'blog:login'
+    template_name = 'blog/post/create_post.html'
+    # permission_denied_message = "You don't have permission."
+    permission_required = 'blog.add_post'
+    # def get_permission_denied_message(self):
+    #     return self.permission_denied_message
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.slug = slugify(form.instance.title)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_list')
+
+
+class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = Post
+    fields = ['title', 'body', 'status']
+    template_name = 'blog/post/update_post.html'
+    permission_required = 'blog.change_post'
+
+    def form_valid(self, form):
+        post = get_object_or_404(Post, id=self.kwargs['pk'])
+        form.instance.post = post
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        post = get_object_or_404(Post, id=self.kwargs['pk'])
+        return reverse('blog:post_detail', kwargs={'year': post.publish.year,
+                                                   'month': post.publish.month,
+                                                   'day': post.publish.day,
+                                                   'post': post.slug})
 
 
 class PostListView(ListView):

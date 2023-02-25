@@ -4,6 +4,9 @@
 
 {% block content %}
     <h1>{{post.title}}</h1>
+    {%if post.author == user%}
+        <a href="{%url 'blog:update_post' post.id %}"><p>Edit</p></a>
+    {%endif%}
     <p class="date">
         Published {{post.publish}} by {{post.author}}
     </p>
