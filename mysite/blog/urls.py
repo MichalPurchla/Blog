@@ -6,12 +6,12 @@ from django.contrib.auth import views as auth_views
 app_name = 'blog'
 
 urlpatterns = [
-    # path('', views.post_list, name='post_list'),
-    # path('<int:id>/', views.post_detail, name='post_detail'),
     path('', views.PostListView.as_view(), name='post_list'),
+    path('draft/', views.PostDraftListView.as_view(), name='post_drafted_list'),
     path('<int:year>/<int:month>/<int:day>/<slug:post>/',
          views.post_detail,
          name='post_detail'),
+    path('draft/<int:year>/<int:month>/<int:day>/<slug:post>/', views.post_draft_detail, name='post_draft_detail'),
     path('<int:post_id>/share/', views.post_share, name='post_share'),
     path('add_post/', views.PostCreateView.as_view(), name='create_post'),
     path('update_post/<int:pk>/', views.PostUpdateView.as_view(), name='update_post'),

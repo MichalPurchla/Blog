@@ -2,11 +2,17 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status=Post.Status.PUBLISHED)
+
+
+class DraftedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Post.Status.DRAFT)
 
 
 # Create your models here.
@@ -30,6 +36,8 @@ class Post(models.Model):
                               default=Status.DRAFT)
     objects = models.Manager()
     published = PublishedManager()
+    drafted = DraftedManager()
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['-publish']
@@ -42,6 +50,12 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:post_detail', args=[self.publish.year,
+                                                 self.publish.month,
+                                                 self.publish.day,
+                                                 self.slug])
+
+    def get_absolute_drafted_url(self):
+        return reverse('blog:post_draft_detail', args=[self.publish.year,
                                                  self.publish.month,
                                                  self.publish.day,
                                                  self.slug])
@@ -67,3 +81,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.user.username} on {self.post}"
+
+
+
