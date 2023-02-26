@@ -30,6 +30,10 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView, ):
         return super().form_valid(form)
 
     def get_success_url(self):
+        # if self.== 'PB':
+        #     self.success_url == 'blog:post_list'
+        # else:
+        #     self.success_url == 'blog:post_drafted_list'
         return reverse_lazy('blog:post_list')
 
 
@@ -39,24 +43,49 @@ class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'blog/post/update_post.html'
     permission_required = 'blog.change_post'
 
+    def return_to_detail(self):
+        post = get_object_or_404(Post, id=self.kwargs['pk'])
+        if post.status == 'PB':
+            return reverse('blog:post_detail', kwargs={'year': post.publish.year,
+                                                       'month': post.publish.month,
+                                                       'day': post.publish.day,
+                                                       'post': post.slug})
+        else:
+            return reverse('blog:post_draft_detail', kwargs={'year': post.publish.year,
+                                                             'month': post.publish.month,
+                                                             'day': post.publish.day,
+                                                             'post': post.slug})
+
     def form_valid(self, form):
         post = get_object_or_404(Post, id=self.kwargs['pk'])
         form.instance.post = post
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['updated'] = True
+        ctx['cancel'] = self.return_to_detail()
+        return ctx
+
     def get_success_url(self):
-        post = get_object_or_404(Post, id=self.kwargs['pk'])
-        return reverse('blog:post_detail', kwargs={'year': post.publish.year,
-                                                   'month': post.publish.month,
-                                                   'day': post.publish.day,
-                                                   'post': post.slug})
+        to_detail = self.return_to_detail()
+        return to_detail
 
 
 class PostListView(ListView):
     queryset = Post.published.all()
     context_object_name = 'posts'
-    paginate_by = 3
+    paginate_by = 5
     template_name = 'blog/post/list.html'
+
+
+class PostDraftListView(ListView):
+    context_object_name = 'posts'
+    paginate_by = 5
+    template_name = 'blog/post/drafted_list.html'
+
+    def get_queryset(self):
+        return Post.drafted.filter(author=self.request.user)
 
 
 def post_list(request):
@@ -88,6 +117,19 @@ def post_detail(request, year, month, day, post):
                   {'post': post,
                    'comments': comments,
                    'form': form})
+
+
+def post_draft_detail(request, year, month, day, post):
+    post = get_object_or_404(Post,
+                             status=Post.Status.DRAFT,
+                             slug=post,
+                             publish__year=year,
+                             publish__month=month,
+                             publish__day=day)
+
+    return render(request,
+                  'blog/post/detail.html',
+                  {'post': post,})
 
 
 def post_share(request, post_id):

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -130,4 +131,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 #
 # LOGIN_REDIRECT_URL = '/blog'
-# LOGIN_URL = '/blog'
+LOGIN_URL = 'blog:login'

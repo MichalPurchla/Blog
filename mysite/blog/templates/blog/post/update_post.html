@@ -1,13 +1,16 @@
 {%extends 'blog/base.html'%}
 
-{%block title%}Create Post{%endblock%}
+{%block title%}Update Post{%endblock%}
 
 {%block content%}
-<h2>Dodaj post</h2>
+<h2>Update post</h2>
     <form action="" method="POST">
         {{form.as_p}}
         {%csrf_token%}
         <input type="submit" value="Zapisz">
+        {%if cancel%}
+            <a href="{{ cancel }}">Anuluj</a>
+        {%endif%}
     </form>
 
 {%endblock%}
