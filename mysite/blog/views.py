@@ -12,6 +12,7 @@ from .forms import EmailPostForm, LoginForm, UserRegistration, CommentForm
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from .forms import PostForm
+from taggit.models import Tag
 
 
 class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView, ):
@@ -39,7 +40,7 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView, ):
 
 class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Post
-    fields = ['title', 'body', 'status']
+    fields = ['title', 'body', 'status', 'tags']
     template_name = 'blog/post/update_post.html'
     permission_required = 'blog.change_post'
 
@@ -88,8 +89,12 @@ class PostDraftListView(ListView):
         return Post.drafted.filter(author=self.request.user)
 
 
-def post_list(request):
+def post_list(request, tag_slug=None):
     post_list = Post.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        post_list = post_list.filter(tags__in=[tag])
     paginator = Paginator(post_list, 3)
     page_number = request.GET.get('page', 1)
     try:
@@ -100,7 +105,8 @@ def post_list(request):
         posts = paginator.page(paginator.num_pages)
     return render(request,
                   'blog/post/list.html',
-                  {'posts': posts})
+                  {'posts': posts,
+                   'tag': tag})
 
 
 def post_detail(request, year, month, day, post):
