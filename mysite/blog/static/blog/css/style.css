@@ -1,0 +1,170 @@
+body {
+    margin:0;
+    padding:0;
+    font-family:helvetica, sans-serif;
+}
+
+a {
+    color:#00abff;
+    text-decoration:none;
+}
+
+h1 {
+    font-weight:normal;
+    border-bottom:1px solid #bbb;
+    padding:0 0 10px 0;
+}
+
+h2 {
+    font-weight:normal;
+    margin:30px 0 0;
+}
+
+#content {
+    float:left;
+    width:60%;
+    padding:0 0 0 30px;
+}
+
+#sidebar {
+    float:right;
+    width:30%;
+    padding:10px;
+    background:#efefef;
+    height:100%;
+}
+
+p.date {
+    color:#ccc;
+    font-family: georgia, serif;
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* pagination */
+.pagination {
+    margin:40px 0;
+    font-weight:bold;
+}
+
+/* forms */
+label {
+    float:left;
+    clear:both;
+    color:#333;
+    margin-bottom:4px;
+}
+input, textarea {
+    clear:both;
+    /*float:left;*/
+    margin:0 0 10px;
+    background:#ededed;
+    border:0;
+    padding:6px 10px;
+    font-size:12px;
+}
+input[type=submit] {
+    font-weight:bold;
+    background:#00abff;
+    color:#fff;
+    padding:10px 20px;
+    font-size:14px;
+    text-transform:uppercase;
+}
+
+.cancel{
+    font-weight:bold;
+    background:#00abff;
+    color:#fff;
+    padding:10px 20px;
+    font-size:14px;
+    text-transform:uppercase;
+    clear:both;
+}
+.errorlist {
+    color:#cc0033;
+    float:left;
+    clear:both;
+    padding-left:10px;
+}
+
+/* comments */
+.comment {
+    padding:10px;
+}
+.comment:nth-child(even) {
+    background:#efefef;
+}
+.comment .info {
+    font-weight:bold;
+    font-size:12px;
+    color:#666;
+}
+
+.post:nth-child(even){
+    background-color: #efefef;
+
+}
+
+
+.hero-section {
+    background-image: url("hero_section.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.hero-box {
+    max-width: 400px;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    position: center;
+    border-radius: 20px;
+}
+
+.hero-box a {
+    display: block;
+    padding: 15px 10px;
+    background-color: #666;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 20px;
+}
+.container {
+    max-width: 1200px;
+    padding: 0 10px;
+    margin: 0 auto;
+}
+.menu_ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #666;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.menu_li {
+  float: left;
+  border-right: 1px solid #bbb;
+}
+
+.menu_li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+.menu_li a:hover {
+  background-color: #111;
+}
+
+.active {
+  background-color: #4CAF50;
+}

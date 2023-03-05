@@ -8,6 +8,7 @@
         <h2>Posts tagged with "{{ tag.name }}"</h2>
      {% endif %}
     {%for post in posts%}
+    <div class="post">
         <h2>
             <a href="{{ post.get_absolute_url }}">
                 {{post.title}}
@@ -27,11 +28,8 @@
         </p>
 
         {{ post.body|truncatewords:30|linebreaks }}
-        {%if post.publish|date != post.updated%}
-        <p>
-            Edited {{ post.updated }} by {{ post.author }}
-        </p>
-        {%endif%}
+
+    </div>
     {% endfor %}
-    {% include "blog/pagination.html" with page=post %}
+    {% include "blog/pagination.html" with page=page_obj %}
 {% endblock %}

@@ -1,9 +1,15 @@
-Blog menu:
-<ul>
-    <li> <a href="{% url 'blog:post_list' %}">Lista Postow</a></li>
-    {% if user.is_authenticated %}
-    <li> <a href="{% url 'blog:post_drafted_list' %}">Lista nieopublikowanych postow</a></li>
-    {%endif%}
-    <li> <a href="{% url 'blog:create_post' %}">Dodaj Post</a></li>
 
+<ul class="menu_ul">
+        {%if user.is_authenticated%}
+                <li class="menu_li"><a href="{%url 'blog:logout'%}">Logout</a></li>
+        {%else%}
+                <li class="menu_li"><a href="{%url 'blog:login'%}">Login</a></li>
+                <li class="menu_li"><a href="{%url 'blog:register'%}">Sign-up</a></li>
+        {%endif%}
+        <li class="menu_li"> <a href="{% url 'blog:post_list' %}">Posts List</a></li>
+        {% if user.is_authenticated %}
+                <li class="menu_li"> <a href="{% url 'blog:post_drafted_list' %}">Drafted posts</a></li>
+        {%endif%}
+        <li class="menu_li"> <a href="{% url 'blog:create_post' %}">Add Post</a></li>
 </ul>
+

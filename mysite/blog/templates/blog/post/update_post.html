@@ -7,9 +7,9 @@
     <form action="" method="POST">
         {{form.as_p}}
         {%csrf_token%}
-        <input type="submit" value="Zapisz">
+        <input type="submit" value="Save">
         {%if cancel%}
-            <a href="{{ cancel }}">Anuluj</a>
+            <a class="cancel" href="{{ cancel }}">Cancel</a>
         {%endif%}
     </form>
 

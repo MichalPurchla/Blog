@@ -10,25 +10,15 @@
                 {{post.title}}
             </a>
         </h2>
-<!--         <p class="tags">-->
-<!--             Tags:-->
-<!--             {% for tag in post.tags.all %}-->
-<!--                <a href="{% url 'blog:post_list_by_tag' tag.slug %}">-->
-<!--             {{ tag.name }}-->
-<!--             </a>-->
-<!--             {% if not forloop.last %}, {% endif %}-->
-<!--             {% endfor %}-->
-<!--         </p>-->
+
         <p class="date">
             Published {{ post.publish }} by {{ post.author }}
         </p>
 
         {{ post.body|truncatewords:30|linebreaks }}
-<!--        {%if post.publish|date != post.updated%}-->
-<!--        <p>-->
-<!--            Edited {{ post.updated }} by {{ post.author }}-->
-<!--        </p>-->
-<!--        {%endif%}-->
+    {% empty %}
+        <p>There are no posts.</p>
     {% endfor %}
+
     {% include "blog/pagination.html" with page=page_obj %}
 {% endblock %}
