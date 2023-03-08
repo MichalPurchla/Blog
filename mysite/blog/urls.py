@@ -1,11 +1,17 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from django.contrib.auth import views as auth_views
+from rest_framework import routers
 
+
+router = routers.DefaultRouter()
+router.register(r'post', views.PostViewSet)
+router.register(r'comment', views.CommentViewSet)
 
 app_name = 'blog'
 
 urlpatterns = [
+    path('api/', include(router.urls)),
     path('', views.PostListView.as_view(), name='post_list'),
     path('tag/<slug:tag_slug>/', views.post_list, name='post_list_by_tag'),
     path('draft/', views.PostDraftListView.as_view(), name='post_drafted_list'),

@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponse
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.decorators.http import require_POST
-from .models import Post
+from .models import Post, Comment
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, CreateView, UpdateView
 from .forms import EmailPostForm, LoginForm, UserRegistration, CommentForm
@@ -14,6 +14,18 @@ from django.contrib.auth import authenticate, login
 from .forms import PostForm
 from taggit.models import Tag
 from django.db.models import Count
+from rest_framework import viewsets
+from .serializers import PostSerializer, CommentSerializer
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
 
 class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView, ):
